@@ -2,7 +2,7 @@
 
 pkgbase=linux-zen-audiofuse
 pkgver=6.18.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux Zen kernel with AudioFuse 16 Rig support'
 arch=(x86_64)
 url="https://github.com/mchalepage/zen-kernel"

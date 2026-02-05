@@ -1662,10 +1662,10 @@ static const struct usb_feature_control_info *get_feature_control_info(int contr
 
 static void __build_feature_ctl(struct usb_mixer_interface *mixer,
 				const struct usbmix_name_map *imap,
-				unsigned int ctl_mask, int control,
+				u64 ctl_mask, int control,
 				struct usb_audio_term *iterm,
 				struct usb_audio_term *oterm,
-				int unitid, int nameid, int readonly_mask)
+				int unitid, int nameid, u64 readonly_mask)
 {
 	const struct usb_feature_control_info *ctl_info;
 	unsigned int len = 0;
@@ -1707,7 +1707,7 @@ static void __build_feature_ctl(struct usb_mixer_interface *mixer,
 		cval->master_readonly = readonly_mask;
 	} else {
 		int i, c = 0;
-		for (i = 0; i < 16; i++)
+		for (i = 0; i < MAX_CHANNELS; i++)
 			if (ctl_mask & BIT(i))
 				c++;
 		cval->channels = c;
@@ -1833,9 +1833,9 @@ static void __build_feature_ctl(struct usb_mixer_interface *mixer,
 }
 
 static void build_feature_ctl(struct mixer_build *state, void *raw_desc,
-			      unsigned int ctl_mask, int control,
+			      u64 ctl_mask, int control,
 			      struct usb_audio_term *iterm, int unitid,
-			      int readonly_mask)
+			      u64 readonly_mask)
 {
 	struct uac_feature_unit_descriptor *desc = raw_desc;
 	int nameid = uac_feature_unit_iFeature(desc);
@@ -1845,7 +1845,7 @@ static void build_feature_ctl(struct mixer_build *state, void *raw_desc,
 }
 
 static void build_feature_ctl_badd(struct usb_mixer_interface *mixer,
-			      unsigned int ctl_mask, int control, int unitid,
+			      u64 ctl_mask, int control, int unitid,
 			      const struct usbmix_name_map *badd_map)
 {
 	__build_feature_ctl(mixer, badd_map, ctl_mask, control,
@@ -2059,7 +2059,7 @@ static int parse_audio_feature_unit(struct mixer_build *state, int unitid,
 	if (state->mixer->protocol == UAC_VERSION_1) {
 		/* check all control types */
 		for (i = 0; i < 10; i++) {
-			unsigned int ch_bits = 0;
+			u64 ch_bits = 0;
 			int control = audio_feature_info[i].control;
 
 			for (j = 0; j < channels; j++) {
@@ -2085,8 +2085,8 @@ static int parse_audio_feature_unit(struct mixer_build *state, int unitid,
 		}
 	} else { /* UAC_VERSION_2/3 */
 		for (i = 0; i < ARRAY_SIZE(audio_feature_info); i++) {
-			unsigned int ch_bits = 0;
-			unsigned int ch_read_only = 0;
+			u64 ch_bits = 0;
+			u64 ch_read_only = 0;
 			int control = audio_feature_info[i].control;
 
 			for (j = 0; j < channels; j++) {
@@ -3398,7 +3398,7 @@ static void snd_usb_mixer_dump_cval(struct snd_info_buffer *buffer,
 		[USB_MIXER_U32] = "U32",
 		[USB_MIXER_BESPOKEN] = "BESPOKEN",
 	};
-	snd_iprintf(buffer, "    Info: id=%i, control=%i, cmask=0x%x, "
+	snd_iprintf(buffer, "    Info: id=%i, control=%i, cmask=0x%llx, "
 			    "channels=%i, type=\"%s\"\n", cval->head.id,
 			    cval->control, cval->cmask, cval->channels,
 			    val_types[cval->val_type]);
