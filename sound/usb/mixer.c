@@ -2021,7 +2021,7 @@ static int parse_audio_feature_unit(struct mixer_build *state, int unitid,
 		bmaControls = ftr->bmaControls;
 	}
 
-	if (channels > 32) {
+	if (channels > 64) {
 		usb_audio_info(state->chip,
 			       "usbmixer: too many channels (%d) in unit %d\n",
 			       channels, unitid);

@@ -3724,6 +3724,20 @@ YAMAHA_DEVICE(0x7010, "UB99"),
 		}
 	}
 },
+/* Arturia AudioFuse 16 Rig */
+{
+	USB_DEVICE(0x1c75, 0xaf20),
+	QUIRK_DRIVER_INFO {
+		.vendor_name = "Arturia",
+		.product_name = "AudioFuse 16 Rig",
+		QUIRK_DATA_COMPOSITE {
+			{ QUIRK_DATA_STANDARD_MIXER(0) },
+			{ QUIRK_DATA_STANDARD_AUDIO(1) },
+			{ QUIRK_DATA_STANDARD_AUDIO(2) },
+			QUIRK_COMPOSITE_END
+		}
+	}
+},
 #define QUIRK_RME_DIGIFACE(pid) \
 { \
 	/* Only claim interface 0 */ \

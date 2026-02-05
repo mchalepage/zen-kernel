@@ -44,7 +44,7 @@ struct usb_mixer_interface {
 	void (*private_suspend)(struct usb_mixer_interface *mixer);
 };
 
-#define MAX_CHANNELS	16	/* max logical channels */
+#define MAX_CHANNELS	64	/* max logical channels */
 
 enum {
 	USB_MIXER_BOOLEAN,
